@@ -4,107 +4,106 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="robots" content="noindex, nofollow">
   <title>Redirecionando...</title>
-
   <style>
     body {
-      background-color: #000;
-      color: #fff;
+      background-color: #000000; /* Fundo preto */
       font-family: Arial, sans-serif;
       margin: 0;
+      padding: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
     h1 {
       font-size: 18px;
+      color: #FFFFFF; /* Texto branco */
       margin-bottom: 20px;
     }
     .loading {
       animation: rotate 1s linear infinite;
-      border: 5px solid #4F4F4F;
-      border-top: 5px solid #00FF00;
+      border: 5px solid #4F4F4F; /* Cinza escuro */
+      border-top: 5px solid #00FF00; /* Parte superior em verde */
       border-radius: 50%;
       height: 50px;
       width: 50px;
     }
     @keyframes rotate {
-      from { transform: rotate(0); }
-      to { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
-
   <script>
-    // ====== Função principal ======
+    // Função para fazer a requisição ao webhook do n8n
     async function obterNumeros() {
       try {
+        console.log('Iniciando requisição ao webhook...');
         const response = await fetch('https://webhook.cfdojon.work/webhook/igorcfjom02', {
           method: 'GET',
           headers: {
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
           }
         });
-
-        if (!response.ok) throw new Error('Falha na requisição ao webhook');
+        console.log('Resposta recebida do webhook:', response);
+        if (!response.ok) {
+          throw new Error('Erro na requisição ao webhook');
+        }
         const data = await response.json();
-
-        // Verifica se a estrutura contém a lista de números
-        const numeros = Array.isArray(data.numbers) ? data.numbers : 
-                        (Array.isArray(data.data?.numbers) ? data.data.numbers : null);
-
-        if (!numeros || numeros.length === 0) throw new Error('Nenhum número retornado');
-        return numeros;
+        console.log('Dados recebidos do webhook:', data);
+        return data.numbers;
       } catch (error) {
-        console.error('Erro ao buscar números:', error);
+        console.error('Erro ao obter os números do webhook:', error);
         throw error;
       }
     }
 
+    // Função para redirecionar para um grupo de WhatsApp aleatório
     async function redirecionar() {
       try {
         const numeros = await obterNumeros();
-        const numero = numeros[Math.floor(Math.random() * numeros.length)];
-        const url = `https://api.whatsapp.com/send?phone=${numero}&text=Oi,%20quero%20conversar%20com%20você!`;
-
-        console.log('✅ Redirecionando para:', url);
-
-        // Atraso curto para garantir que pixels disparem antes do redirecionamento
-        setTimeout(() => window.location.href = url, 1000);
-
+        const numeroAleatorio = numeros[Math.floor(Math.random() * numeros.length)];
+        const url = `https://api.whatsapp.com/send?phone=${numeroAleatorio}&text=Oi,%20quero%20conversar%20com%20voce!`;
+        console.log('Redirecionando para:', url);
+        window.location.href = url;
       } catch (error) {
-        console.warn('⚠️ Redirecionamento de fallback ativado');
+        console.error('Erro ao obter os números ou redirecionar:', error);
+        // URL de fallback em caso de erro
         window.location.href = 'https://api.whatsapp.com/send?phone=5562991688013&text=Oi,%20tudo%20bem%20gata%20?';
       }
     }
-  </script>
 
-  <!-- Facebook Pixel 1 -->
+   </script>
+  <!-- Pixel do Facebook -->
   <script>
-    !function(f,b,e,v,n,t,s){
-      if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)
-    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-
-    fbq('init', '1312196850345293');  // Pixel 1
-    fbq('init', '1748812605764523');  // Pixel 2
-    fbq('track', 'PageView');
-
-    function dispararEventoLead() {
-      fbq('track', 'Lead');
-    }
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', 'SEUPIXEL');
+    fbq('track', 'Pageview');
   </script>
 
 </head>
-
-<body onload="dispararEventoLead(); redirecionar();">
-  <h1>Aguarde um momento por favor...</h1>
-  <div class="loading"></div>
+<body onload="redirecionar(); enviarPixel();">
+  <div class="loading-container">
+    <h1>Aguarde um momento por favor...</h1>
+    <div class="loading"></div>
+  </div>
 </body>
 </html>
