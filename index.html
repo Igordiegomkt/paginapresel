@@ -1,37 +1,103 @@
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  // --- Funções auxiliares ---
-  function setCookie(name, value, days) {
-    const d = new Date();
-    d.setTime(d.getTime() + (days * 86400000));
-    document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/; SameSite=Lax`;
-  }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Carregando...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  function getCookie(name) {
-    const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
-    return match ? match[2] : null;
-  }
+  <!-- SEO e preview -->
+  <meta name="description" content="Aguarde um momento, estamos te redirecionando.">
+  <meta property="og:title" content="Carregando...">
+  <meta property="og:description" content="Aguarde um momento, estamos te redirecionando.">
+  <meta property="og:image" content="https://seusite.com/imagem.jpg">
 
-  // --- Configuração do teste A/B ---
-  const webhookA = "https://webhook-cf.zapsafe.work/webhook/b";
-  const webhookB = "https://webhook-cf.zapsafe.work/webhook/a";
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      flex-direction: column;
+      margin: 0;
+    }
+    h1 {
+      font-size: 18px;
+      text-align: center;
+    }
+    .spinner {
+      border: 5px solid #4F4F4F;
+      border-top: 5px solid #00FF00;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 
-  let testVersion = getCookie("ab_test_version");
-  if (!testVersion) {
-    testVersion = Math.random() < 0.5 ? "A" : "B";
-    setCookie("ab_test_version", testVersion, 30);
-  }
+  <!-- Google Tag Manager -->
+  <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;
+      f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MT6B5TBD');
+  </script>
+  <!-- End Google Tag Manager -->
 
-  const targetWebhook = testVersion === "A" ? webhookA : webhookB;
+  <!-- UTMify Script -->
+  <script
+    src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+    data-utmify-prevent-xcod-sck
+    data-utmify-prevent-subids
+    async
+    defer
+  ></script>
 
-  // --- Captura parâmetros (UTM, GTM, etc.) ---
-  const params = new URLSearchParams(window.location.search);
-  params.set("ab_test_version", testVersion);
+  <!-- Pixel UTMify -->
+  <script>
+    window.pixelId = "68e19e32a255808f0ad6f844";
+    (function(){
+      var a = document.createElement("script");
+      a.async = true;
+      a.defer = true;
+      a.src = "https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+      document.head.appendChild(a);
+    })();
+  </script>
 
-  // --- Monta URL final ---
-  const redirectUrl = `${targetWebhook}?${params.toString()}`;
+  <!-- 🔁 Redirecionamento rápido e rastreável -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const params = new URLSearchParams(window.location.search);
+      const queryString = params.toString();
+      const destino = "https://webhook-cf.zapsafe.work/webhook/b" + (queryString ? "?" + queryString : "");
 
-  // --- Redirecionamento instantâneo preservando rastreamento ---
-  window.location.replace(redirectUrl);
-});
-</script>
+      // Atraso mínimo só para GTM/UTMify registrar o evento (300ms)
+      setTimeout(() => {
+        window.location.replace(destino);
+      }, 300);
+    });
+  </script>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MT6B5TBD"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+
+  <h1>Carregando, aguarde...</h1>
+  <div class="spinner"></div>
+</body>
+</html>
