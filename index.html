@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Carregando...</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO e preview -->
   <meta name="description" content="Aguarde um momento, estamos te redirecionando.">
   <meta property="og:title" content="Carregando...">
   <meta property="og:description" content="Aguarde um momento, estamos te redirecionando.">
@@ -26,7 +28,7 @@
       text-align: center;
     }
     .spinner {
-      border: 5px solid #444;
+      border: 5px solid #4F4F4F;
       border-top: 5px solid #00FF00;
       border-radius: 50%;
       width: 50px;
@@ -42,50 +44,57 @@
 
   <!-- Google Tag Manager -->
   <script>
-    (function(w,d,s,l,i){
-      w[l]=w[l]||[];
-      w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});
       var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
-      j.async=true;
-      j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;
       f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-MT6B5TBD');
   </script>
   <!-- End Google Tag Manager -->
 
-  <!-- Captura de UTMs sem UTMify -->
+  <!-- UTMify Script -->
+  <script
+    src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+    data-utmify-prevent-xcod-sck
+    data-utmify-prevent-subids
+    async
+    defer
+  ></script>
+
+  <!-- Pixel UTMify -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    window.pixelId = "68e19e32a255808f0ad6f844";
+    (function(){
+      var a = document.createElement("script");
+      a.async = true;
+      a.defer = true;
+      a.src = "https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+      document.head.appendChild(a);
+    })();
+  </script>
+
+  <!-- 🔁 Redirecionamento rápido e rastreável -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
       const params = new URLSearchParams(window.location.search);
       const queryString = params.toString();
-      const destinoBase = "https://webhook-cf.zapsafe.work/webhook/b";
-      const destino = destinoBase + (queryString ? "?" + queryString : "");
+      const destino = "https://webhook-cf.zapsafe.work/webhook/b" + (queryString ? "?" + queryString : "");
 
-      // Salva UTMs no localStorage (para análise posterior)
-      const utmParams = {};
-      for (const [key, value] of params.entries()) {
-        if (key.startsWith("utm_")) {
-          utmParams[key] = value;
-        }
-      }
-      if (Object.keys(utmParams).length > 0) {
-        localStorage.setItem("utm_data", JSON.stringify(utmParams));
-      }
-
-      // Espera o GTM carregar antes de redirecionar (ótimo para Facebook Ads)
+      // Atraso mínimo só para GTM/UTMify registrar o evento (300ms)
       setTimeout(() => {
-        window.location.href = destino;
-      }, 900); // 0.9s — tempo seguro para pixel registrar
+        window.location.replace(destino);
+      }, 300);
     });
   </script>
 </head>
-
 <body>
   <!-- Google Tag Manager (noscript) -->
   <noscript>
     <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MT6B5TBD"
-      height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
   </noscript>
 
   <h1>Carregando, aguarde...</h1>
